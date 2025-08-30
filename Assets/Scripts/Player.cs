@@ -7,13 +7,14 @@ public class Player : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float jump;
     [SerializeField] Transform groundCheck;
-    [SerializeField] LayerMask groundLayer;    
+    [SerializeField] LayerMask groundLayer;
     [SerializeField] GameObject landMine;
     [SerializeField] GameObject bullet;
     [SerializeField] float landMineTime;
     [SerializeField] float shootTime;
     [SerializeField] Transform bulletSpawnPoint;
-
+    [SerializeField] private GameObject[] life;
+    private SpriteRenderer targetSpriteRenderer;
     private bool canJump;
     private bool doubleJump;
 
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
     private float shootSpeedMultiplier = 2f;
     private Vector2 lastDirection = Vector2.right;
     private Vector2 direction;
-    
+
 
     void Start()
     {
@@ -84,35 +85,23 @@ public class Player : MonoBehaviour
         }
     }
 
-        
-    private void OnTriggerEnter2D(Collider2D other) {
-        
-        if(other.tag == "Enemy"){
-            Destroy(gameObject);    
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.tag == "Enemy")
+        {
+            Destroy(gameObject);
         }
     }
-}
 
-
-// if(isGrounded())
-        // {
-        //     doubleJump = false;
-        // }
-
-        // if(Input.GetButtonDown("Jump"))
-        // {
-        //     if(isGrounded() || !doubleJump)
-        //     {
-        //         rb.velocity = new Vector2(rb.velocity.x, jump);
-        //         if(!isGrounded())
-        //         {
-        //             doubleJump = true;
-        //         }
-        //     }
-        // }
-
-    // private bool isGrounded()
+    // void LoseLife() //not working
     // {
-    //     canJump = Physics2D.OverlapCapsule(groundCheck.position, new Vector2(1.1f, 1.1f), CapsuleDirection2D.Horizontal, 0, groundLayer);
-    //     return canJump;
+    //     if (lifes.size >= 1)
+    //     {
+    //         targetSpriteRenderer = targetObject.GetComponent<SpriteRenderer>();
+    //         targetSpriteRenderer.enabled = !targetSpriteRenderer.enabled;
+    //     }
     // }
+
+}
