@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] float landMineTime;
     [SerializeField] float shootTime;
     [SerializeField] Transform bulletSpawnPoint;
-    [SerializeField] private bool tripleShoot = true;
+    [SerializeField] private bool tripleShoot = false;
     [SerializeField] private RawImage[] life;
     private int currentLives = 3;
     private SpriteRenderer targetSpriteRenderer;
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour
                     canShoot = shootTime;
                 }
                 else
-                {                    
+                {
                     GameObject b1 = Instantiate(bullet, bulletSpawnPoint.position, Quaternion.identity);
                     b1.GetComponent<Bullet>().SetDirection(lastDirection);
 
@@ -113,24 +113,40 @@ public class Player : MonoBehaviour
 
         if (other.tag == "Enemy")
         {
-            Debug.Log("Ouch!");
+            //Debug.Log("Ouch!");
             LoseLife();
+            Destroy(other.gameObject);
         }
+
+        if (other.tag == "TripleShotPowerUp")
+        {
+            tripleShoot = true;
+            Destroy(other.gameObject);
+            StartCoroutine(TripleShotTimer());
+        }
+
     }
 
-    void LoseLife() //not working
+    void LoseLife()
     {
         if (currentLives > 0)
-    {
-        // acessa o último ocupado e desativa
-        life[currentLives - 1].enabled = false;
-        currentLives--;
+        {
+            // acessa o último ocupado e desativa
+            life[currentLives - 1].enabled = false;
+            currentLives--;
+        }
+
+        if (currentLives <= 0)
+        {
+            Destroy(gameObject);
+        }
+
     }
 
-    if (currentLives <= 0)
-    {        
-        Destroy(gameObject);
-    }
+    IEnumerator TripleShotTimer()
+    {
+        yield return new WaitForSeconds(5.0f);
+        tripleShoot = false;
     }
 
 }
