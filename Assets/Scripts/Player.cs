@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -13,11 +14,11 @@ public class Player : MonoBehaviour
     [SerializeField] float landMineTime;
     [SerializeField] float shootTime;
     [SerializeField] Transform bulletSpawnPoint;
-    [SerializeField] private GameObject[] life;
+    [SerializeField] private RawImage[] life;
+    private int currentLives = 3;
     private SpriteRenderer targetSpriteRenderer;
     private bool canJump;
     private bool doubleJump;
-
     private Rigidbody2D rb;
     private float move;
     private float moveUp;
@@ -91,17 +92,24 @@ public class Player : MonoBehaviour
 
         if (other.tag == "Enemy")
         {
-            Destroy(gameObject);
+            Debug.Log("Ouch!");
+            LoseLife();
         }
     }
 
-    // void LoseLife() //not working
-    // {
-    //     if (lifes.size >= 1)
-    //     {
-    //         targetSpriteRenderer = targetObject.GetComponent<SpriteRenderer>();
-    //         targetSpriteRenderer.enabled = !targetSpriteRenderer.enabled;
-    //     }
-    // }
+    void LoseLife() //not working
+    {
+        if (currentLives > 0)
+    {
+        // acessa o último ocupado e desativa
+        life[currentLives - 1].enabled = false;
+        currentLives--;
+    }
+
+    if (currentLives <= 0)
+    {        
+        Destroy(gameObject);
+    }
+    }
 
 }
