@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] float landMineTime;
     [SerializeField] float shootTime;
     [SerializeField] Transform bulletSpawnPoint;
+    [SerializeField] private bool tripleShoot = true;
     [SerializeField] private RawImage[] life;
     private int currentLives = 3;
     private SpriteRenderer targetSpriteRenderer;
@@ -79,9 +80,29 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown("space"))
             {
-                GameObject b = Instantiate(bullet, bulletSpawnPoint.position, Quaternion.identity);
-                b.GetComponent<Bullet>().SetDirection(lastDirection);
-                canShoot = shootTime;
+                if (!tripleShoot)
+                {
+                    GameObject b = Instantiate(bullet, bulletSpawnPoint.position, Quaternion.identity);
+                    // GameObject b = Instantiate(bullet, bulletSpawnPoint.position, Quaternion.identity);
+                    b.GetComponent<Bullet>().SetDirection(lastDirection);
+                    canShoot = shootTime;
+                }
+                else
+                {                    
+                    GameObject b1 = Instantiate(bullet, bulletSpawnPoint.position, Quaternion.identity);
+                    b1.GetComponent<Bullet>().SetDirection(lastDirection);
+
+                    //Crio uma nova direção para o tiro triplo:
+                    Vector2 dir2 = Quaternion.AngleAxis(30, Vector3.forward) * lastDirection;
+                    GameObject b2 = Instantiate(bullet, bulletSpawnPoint.position, Quaternion.identity);
+                    b2.GetComponent<Bullet>().SetDirection(dir2);
+
+                    Vector2 dir3 = Quaternion.AngleAxis(-30, Vector3.forward) * lastDirection;
+                    GameObject b3 = Instantiate(bullet, bulletSpawnPoint.position, Quaternion.identity);
+                    b3.GetComponent<Bullet>().SetDirection(dir3);
+
+                    canShoot = shootTime;
+                }
             }
         }
     }
